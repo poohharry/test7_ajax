@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type = "text/javascript" src = "./js/jquery-1.12.4.min.js"></script>
+<script src="./summernote/summernote-lite.js"></script>
+<script src="./summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="./summernote/summernote-lite.css">
+<style type="text/css">
+	form{
+		width: 800px;
+	}
+	#title{
+		width: 794px;
+		margin-bottom: 10px;
+	}
+	.btns>a{
+		display: block; 
+	    float:left;
+	    width: 75px;
+	    height: 26px;
+		background-color: #da3238;
+	    border: 0px;
+	    border-radius: 7px;
+	    margin: 5px 10px;
+	    margin-top:5px;
+	    margin-right: 10px;
+	    text-align: center;
+	    text-decoration: none;
+	    color: white;
+	}
+</style>
+<script type="text/javascript">
+	
+	var loadData = function(num){
+	 $.ajax({
+	    url: 'http://127.0.0.1:8080/test7/detail.do',
+	    type: 'get',
+	    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	    data: $.param({num:num}),
+	    dataType: 'json',
+	    success: function(data) {
+	    	
+	    var board = data.board[0];
+	    	$('#title').val(board.title);
+	    	$('#num').val(num);
+	    	$('.note-editable').html(board.content);
+	    	
+	    },
+	    error: function(xhr, status, errMsg) {
+	       console.log(errMsg);
+	    }
+	 });
+	};
+
+	var update = function(num) {
+	    // url 쿼리스트링 자동생성 메서드 - $('form element').serialize()
+	    var param = $('.container form').serialize();
+	    
+	    $.post('http://127.0.0.1:8080/test7/update.do', param, function(data, msg) {
+	       console.log(data, msg);
+	       location.href = "detail.html?num=" + num;
+	    })
+	 };
+	 
+	 var note = $('#summernote');
+	 
+	 $(function(){
+		 var num = location.search.substr(location.search.indexOf('=')+1);
+	     loadData(num);
+	     
+	    // 에디터 내용 공백체크
+		$('#submitBtn').click(function() {
+			if($('.note-editable').html() == '<p><br></p>'){
+				alert('내용은 공백이 될 수 없습니다.');
+				return;
+			}
+			update(num);
+         	return false;
+		});
+		
+		$('#listBtn').click(function() {
+		    history.back();
+		});
+	    
+	 });
+	 
+
+</script>
+</head>
+<body>
+<h1>글 수정 페이지</h1>
+<div class="container">
+	<form action="update.do" method="post" id="frm">
+		
+		<input type="text" name="title" id="title" placeholder="제목">
+
+	
+		<textarea id="summernote" name="content"></textarea>
+		
+		<input type="hidden" name="num" id="num">
+		
+		<div class="btns">
+            <a href="#" id="submitBtn">작성</a>
+            <a href="#" id="listBtn">뒤로가기</a>
+        </div>
+	</form>
+
+</div>
+
+
+
+<script src="./js/updateEditor.js"></script>
+</body>
+</html>

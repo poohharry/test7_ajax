@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	table, tr, td {
+		border-collapse: collapse;
+	}
+	td, th{
+		border-bottom: 1px solid black;
+		text-align: center;
+	}
+	tbody>tr>td:nth-child(2) {
+		width: 300px;
+	
+	}
+	tbody>tr>td:nth-child(3) {
+		width: 130px;
+	
+	}
+	tbody>tr>td:nth-child(4) {
+		width: 130px;
+	
+	}
+	tbody>tr>td:last-child {
+		width: 100px;
+	
+	}
+	
+	a {
+		text-decoration: none;
+	}
+	
+</style>
+<script type = "text/javascript" src = "./js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+	var listLoading=function(){
+		   
+	   $.get('http://127.0.0.1:8080/test7/list.do', function(data){
+	      data.board.forEach(function(ele){
+	         $('<tr/>')
+	            .append($('<td/>').html('<a href = "detail.html?num='+ ele.num +'">'+ ele.num+'</a>'))
+	            .append($('<td/>').html('<a href = "detail.html?num='+ ele.num +'">'+ ele.title+'</a>'))
+	            .append($('<td/>').html(ele.userId))
+	            .append($('<td/>').html(ele.wrdate.substring(0,10)))
+	            .append($('<td/>').html(ele.viewCnt))
+	         .appendTo('tbody');
+	      });
+	      }, "json");
+	};
+	
+	$(function() {
+	   listLoading();
+	})
+</script>
+
+</head>
+<body>
+<h1>list page</h1>
+<table>
+	<thead>
+		<tr>
+			<th>번호</th>
+			<th>제목</th>
+			<th>작성자</th>
+			<th>작성일</th>
+			<th>조회수</th>
+		</tr>
+	</thead>
+	<tbody>
+		
+	</tbody>
+</table>
+<a href="insert.html">글쓰기</a>
+</body>
+</html>

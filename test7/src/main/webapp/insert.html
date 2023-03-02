@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type = "text/javascript" src = "./js/jquery-1.12.4.min.js"></script>
+<script src="./summernote/summernote-lite.js"></script>
+<script src="./summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="./summernote/summernote-lite.css">
+<style type="text/css">
+	form{
+		width: 800px;
+	}
+	#title{
+		width: 794px;
+		margin-bottom: 10px;
+	}
+	.btns>a{
+		display: block; 
+	    float:left;
+	    width: 75px;
+	    height: 26px;
+		background-color: #da3238;
+	    border: 0px;
+	    border-radius: 7px;
+	    margin: 5px 10px;
+	    margin-top:5px;
+	    margin-right: 10px;
+	    text-align: center;
+	    text-decoration: none;
+	    color: white;
+	}
+</style>
+<script type="text/javascript">
+	var addEmp = function() {
+	    // url 쿼리스트링 자동생성 메서드 - $('form element').serialize()
+	    var param = $('.container form').serialize();
+	    
+	    $.post('http://127.0.0.1:8080/test7/insert.do', param, function(data, msg) {
+	       console.log(data, msg);
+	       location.href = "index.html";
+	    })
+	 };
+	 
+	 var note = $('#summernote');
+	 
+	 $(function(){
+	    // 에디터 내용 공백체크
+		$('#submitBtn').click(function() {
+			if($('.note-editable').html() == '<p><br></p>'){
+				alert('내용은 공백이 될 수 없습니다.');
+				return;
+			}
+			addEmp();
+		});
+		
+		
+	    
+	 });
+	 
+
+</script>
+</head>
+<body>
+<h1>글 작성 페이지</h1>
+<div class="container">
+	<form action="insert.do" method="post" id="frm">
+		
+		<input type="text" name="title" id="title" placeholder="제목">
+
+	
+		<textarea id="summernote" name="content"></textarea>
+		
+		<input type="hidden" name="userId" value="admin">
+		
+		<div class="btns">
+            <a href="#" id="submitBtn">작성</a>
+            <a href="index.html" id="listBtn">뒤로가기</a>
+        </div>
+	</form>
+
+</div>
+
+
+
+<script src="./js/editor.js"></script>
+</body>
+</html>

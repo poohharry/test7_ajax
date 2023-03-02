@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<style type="text/css">
+	.btns>a{
+		display: block; 
+	    float:left;
+	    width: 75px;
+	    height: 26px;
+		background-color: #da3238;
+	    border: 0px;
+	    border-radius: 7px;
+	    margin: 5px 10px;
+	    margin-top:5px;
+	    margin-right: 10px;
+	    text-align: center;
+	    text-decoration: none;
+	    color: white;
+	}
+
+</style>
+<script type = "text/javascript" src = "./js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+	var loadData = function(num){
+	 $.ajax({
+	    url: 'http://127.0.0.1:8080/test7/detail.do',
+	    type: 'get',
+	    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+	    data: $.param({num:num}),
+	    // dataType이 영향을 주는 것은 success 콜백 함수의 첫 번째 매개변수이다.
+	    dataType: 'json',
+	    success: function(data) {
+	    	
+	    var board = data.board[0];
+	    	$('.btns').prepend('<a href="update.html?num='+num+'" id="updateBtn">수정</a>');
+	    	// $('.btns').append('<a href="#" id="deleteBtn">삭제</a>');
+	    	$('.writer').html('<p>작성자 : '+ board.userId+'</p>');
+	    	$('.dateView').html('<span>작성일 : '+ board.wrdate.substring(0,10)+'</span>&nbsp;&nbsp;<span>조회수 : ' 
+	    						+board.viewCnt+'</span>');
+	    	$('.title').html('<h3>제목 : '+board.title+'</h3>');
+	    	$('.content').html(board.content);
+	    },
+	    error: function(xhr, status, errMsg) {
+	       console.log(errMsg);
+	    }
+	 });
+	};
+
+	var deleteBoard = function(num) {
+		console.log("삭제 버튼 클릭");
+			if (confirm("정말 삭제하시겠습니까 ?")) {
+				$.ajax({
+				url: 'http://127.0.0.1:8080/test7/delete.do',
+				type: 'get',
+				data: {num:num},
+
+				success: function() {
+					location.href="index.html";
+				}
+				});
+			}
+	}
+
+
+	$('#deleteBtn').click(function() {
+	  
+	});
+	
+	
+	 $(function() {
+		var num = location.search.substr(location.search.indexOf('=')+1);
+		loadData(num);
+		
+		$('#deleteBtn').click(function() {
+			deleteBoard(num);
+		});
+
+	 });
+</script>
+
+</head>
+<body>
+<h1>detail page</h1>
+
+<div class="container">
+	<div class="writer">
+		
+	</div>
+	<div class="dateView">
+	
+	</div>
+	<div class="title">
+		
+	</div>
+	<div class="content">
+	
+	</div>
+	
+	<div class="btns">
+	    
+	    <a href="index.html" id="listBtn">목록으로</a>
+		<a href="#" id="deleteBtn">삭제</a>
+	</div>
+	
+</div>
+
+
+
+</body>
+</html>
